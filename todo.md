@@ -1,0 +1,2 @@
+- DB Config should come from .env
+- Migrations
