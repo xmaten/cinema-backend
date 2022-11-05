@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equal, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { CreateRepertoireDto } from './dto/create-repertoire.dto';
 import { Repertoire } from './repertoire.entity';
