@@ -6,6 +6,7 @@ import { Screening } from './screening.entity';
 import { CreateScreeningDto } from './dto/create-screening.dto';
 import { Movie } from '../movies/movie.entity';
 import { Room } from '../rooms/rooms.entity';
+import { ReservationsService } from '../reservations/reservations.service';
 
 @Injectable()
 export class ScreeningService {
@@ -18,6 +19,8 @@ export class ScreeningService {
 
     @InjectRepository(Room)
     private readonly roomRepository: Repository<Room>,
+
+    private readonly reservationsService: ReservationsService,
   ) {}
 
   async findAll(): Promise<Screening[]> {
@@ -26,16 +29,27 @@ export class ScreeningService {
 
   async create(createScreeningDto: CreateScreeningDto): Promise<Screening> {
     const screening = new Screening();
-    screening.movie = await this.movieRepository.findOneBy({
+
+    const movie = await this.movieRepository.findOneBy({
       id: createScreeningDto.movieId,
     });
-    screening.room = await this.roomRepository.findOneBy({
+    const room = await this.roomRepository.findOneBy({
       id: createScreeningDto.roomId,
     });
+
+    screening.room = room;
+    screening.movie = movie;
     screening.duration = createScreeningDto.duration;
     screening.startsAt = createScreeningDto.startsAt;
 
-    return this.screeningRepository.save(screening);
+    const savedScreening = await this.screeningRepository.save(screening);
+
+    await this.reservationsService.createScreeningRoom({
+      screening: savedScreening,
+      room,
+    });
+
+    return screening;
   }
 
   async findOne(id: number): Promise<Screening> {

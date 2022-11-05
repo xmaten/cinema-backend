@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Screening } from '../screenings/screening.entity';
+import { ScreeningRoom } from '../reservations/screening-room.entity';
 
 @Entity()
 export class Room {
@@ -19,6 +22,12 @@ export class Room {
 
   @Column()
   seatsInRow: number;
+
+  @OneToMany(() => Screening, (screening) => screening)
+  screenings: Screening[];
+
+  @OneToMany(() => ScreeningRoom, (screeningRoom) => screeningRoom)
+  screeningRooms: ScreeningRoom[];
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -7,6 +7,7 @@ import { ScreeningRoom } from './screening-room.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ScreeningRoom])],
+  exports: [ReservationsService],
   providers: [ReservationsService],
   controllers: [ReservationsController],
 })

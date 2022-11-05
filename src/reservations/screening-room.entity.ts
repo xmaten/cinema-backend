@@ -3,7 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -16,11 +16,11 @@ export class ScreeningRoom {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Screening)
+  @ManyToOne(() => Screening)
   @JoinColumn()
   screening: Screening;
 
-  @OneToOne(() => Room)
+  @ManyToOne(() => Room)
   @JoinColumn()
   room: Room;
 
