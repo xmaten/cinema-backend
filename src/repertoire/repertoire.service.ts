@@ -34,7 +34,10 @@ export class RepertoireService {
     });
   }
 
-  async findByDate(date: string): Promise<Repertoire> {
+  async findByDate(stringDate: string): Promise<Repertoire> {
+    const date = stringDate.split('T')[0];
+    console.log(date);
+
     return this.repertoireRepository.findOne({
       where: { date },
       relations: { screenings: true },
