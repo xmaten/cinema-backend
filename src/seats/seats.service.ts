@@ -25,7 +25,7 @@ export class SeatsService {
     return this.screeningRoomRepository.save(screeningRoom);
   }
 
-  async reserveSeat(reserveSeatDto: ReserveSeatDto): Promise<ScreeningRoom> {
+  async reserveSeats(reserveSeatDto: ReserveSeatDto): Promise<ScreeningRoom> {
     const screeningRoom = await this.screeningRoomRepository.findOne({
       where: {
         id: reserveSeatDto.screeningRoomId,
@@ -37,7 +37,7 @@ export class SeatsService {
 
     const newReservedSeats = [
       ...screeningRoom.reservedSeats,
-      reserveSeatDto.seat,
+      ...reserveSeatDto.seats,
     ];
 
     return this.screeningRoomRepository.save({
@@ -46,7 +46,7 @@ export class SeatsService {
     });
   }
 
-  async takeSeat(takeSeatDto: ReserveSeatDto): Promise<ScreeningRoom> {
+  async takeSeats(takeSeatDto: ReserveSeatDto): Promise<ScreeningRoom> {
     const screeningRoom = await this.screeningRoomRepository.findOne({
       where: {
         id: takeSeatDto.screeningRoomId,
@@ -57,9 +57,9 @@ export class SeatsService {
     });
 
     const newReservedSeats = screeningRoom.reservedSeats.filter(
-      (seat) => seat !== takeSeatDto.seat,
+      (seat) => !takeSeatDto.seats.includes(seat),
     );
-    const newTakenSeats = [...screeningRoom.takenSeats, takeSeatDto.seat];
+    const newTakenSeats = [...screeningRoom.takenSeats, ...takeSeatDto.seats];
 
     return this.screeningRoomRepository.save({
       ...screeningRoom,

@@ -1,4 +1,4 @@
 export class ReserveSeatDto {
   screeningRoomId: number;
-  seat: string;
+  seats: string[];
 }
