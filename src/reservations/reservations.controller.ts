@@ -10,14 +10,10 @@ import {
 import { ReservationsService } from './reservations.service';
 import { ScreeningRoom } from './screening-room.entity';
 import { ReserveSeatDto } from '../seats/dto/reserve-seat.dto';
-import { SeatsService } from '../seats/seats.service';
 
 @Controller('reservations')
 export class ReservationsController {
-  constructor(
-    private readonly reservationsService: ReservationsService,
-    private readonly seatsService: SeatsService,
-  ) {}
+  constructor(private readonly reservationsService: ReservationsService) {}
 
   @Get('/screening-room/:screeningId')
   getScreeningRoom(
@@ -28,11 +24,12 @@ export class ReservationsController {
 
   @Post('/start')
   startReservation(@Body() startReservationDto: ReserveSeatDto) {
-    return this.seatsService.reserveSeats(startReservationDto);
+    //TODO: adjust start reservation dto to take also type of ticket
+    return this.reservationsService.startReservation(startReservationDto);
   }
 
   @Post('/finish')
   finishReservation(@Body() finishReservationDto: ReserveSeatDto) {
-    return this.seatsService.takeSeats(finishReservationDto);
+    return this.reservationsService.finishReservation(finishReservationDto);
   }
 }
