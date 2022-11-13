@@ -19,7 +19,7 @@ export class Repertoire {
   @JoinTable()
   screenings: Screening[];
 
-  @Column()
+  @Column({ type: 'date' })
   date: string;
 
   @CreateDateColumn({

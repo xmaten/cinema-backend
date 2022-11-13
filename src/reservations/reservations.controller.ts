@@ -1,4 +1,11 @@
-import { Body, Controller, Param, ParseIntPipe, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Put,
+} from '@nestjs/common';
 
 import { ReservationsService } from './reservations.service';
 import { ScreeningRoom } from './screening-room.entity';
@@ -28,5 +35,12 @@ export class ReservationsController {
       seat: reserveSeatDto.seat,
       screeningRoomId,
     });
+  }
+
+  @Get('/screening-room/:screeningId')
+  getSeats(
+    @Param('screeningId', ParseIntPipe) screeningId: number,
+  ): Promise<ScreeningRoom> {
+    return this.reservationsService.getSeats(screeningId);
   }
 }
