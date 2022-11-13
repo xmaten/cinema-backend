@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ScreeningRoom } from '../screening-room.entity';
-import { CreateScreeningRoomDto } from '../dto/create-screening-room.dto';
+import { ScreeningRoom } from '../reservations/screening-room.entity';
+import { CreateScreeningRoomDto } from '../reservations/dto/create-screening-room.dto';
 import { ReserveSeatDto } from './dto/reserve-seat.dto';
 
 @Injectable()
@@ -65,13 +65,6 @@ export class SeatsService {
       ...screeningRoom,
       reservedSeats: newReservedSeats,
       takenSeats: newTakenSeats,
-    });
-  }
-
-  async getSeats(screeningId: number): Promise<ScreeningRoom> {
-    return this.screeningRoomRepository.findOne({
-      where: { screening: { id: screeningId } },
-      relations: { room: true, screening: true },
     });
   }
 }

@@ -23,4 +23,11 @@ export class ReservationsService {
 
     return this.screeningRoomRepository.save(screeningRoom);
   }
+
+  async getScreeningRoom(screeningId: number): Promise<ScreeningRoom> {
+    return this.screeningRoomRepository.findOne({
+      where: { screening: { id: screeningId } },
+      relations: { room: true, screening: true },
+    });
+  }
 }
