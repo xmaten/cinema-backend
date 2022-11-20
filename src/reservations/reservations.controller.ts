@@ -24,7 +24,7 @@ export class ReservationsController {
 
   @Post('/start')
   startReservation(@Body() startReservationDto: ReserveSeatDto) {
-    //TODO: adjust start reservation dto to take also type of ticket
+    console.log(startReservationDto);
     return this.reservationsService.startReservation(startReservationDto);
   }
 
