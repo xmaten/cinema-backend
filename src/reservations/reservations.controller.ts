@@ -5,11 +5,13 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 
 import { ReservationsService } from './reservations.service';
 import { ScreeningRoom } from './screening-room.entity';
 import { ReserveSeatDto } from '../seats/dto/reserve-seat.dto';
+import { UpdateTicketsDto } from './dto/update-tickets.dto';
 
 @Controller('reservations')
 export class ReservationsController {
@@ -24,8 +26,12 @@ export class ReservationsController {
 
   @Post('/start')
   startReservation(@Body() startReservationDto: ReserveSeatDto) {
-    console.log(startReservationDto);
     return this.reservationsService.startReservation(startReservationDto);
+  }
+
+  @Put('/tickets')
+  updateTickets(@Body() updateTicketsDto: UpdateTicketsDto) {
+    return this.reservationsService.updateTickets(updateTicketsDto);
   }
 
   @Post('/finish')

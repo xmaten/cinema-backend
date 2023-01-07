@@ -8,6 +8,7 @@ import { ReserveSeatDto } from '../seats/dto/reserve-seat.dto';
 import { SeatsService } from '../seats/seats.service';
 import { Reservation, ReservationStatus } from './reservation.entity';
 import { Ticket, TicketStatus, TicketType } from './ticket.entity';
+import { UpdateTicketsDto } from './dto/update-tickets.dto';
 
 @Injectable()
 export class ReservationsService {
@@ -50,8 +51,6 @@ export class ReservationsService {
       },
     });
 
-    console.log(screeningRoom);
-
     await this.seatsService.reserveSeats(startReservationDto);
     const reservation = await this.reservationRepository.save({
       status: ReservationStatus.STARTED,
@@ -71,6 +70,32 @@ export class ReservationsService {
     );
 
     return reservation;
+  }
+
+  async updateTickets(updateTicketsDto: UpdateTicketsDto) {
+    // TODO: Currently where checks only for reservationId, I need to check for seat as well
+    // OR in previous step (/start endpoint) I could return IDs of all tickets. Then on frontend connect these ids with given seats.
+    // When I'm sending request to this service, I would send seat number as well as ticket ID so I know what to update
+
+    await Promise.all(
+      updateTicketsDto.selectedTickets.map(async (ticket) => {
+        const result = await this.ticketRepository
+          .createQueryBuilder()
+          .update({
+            seat: ticket.seat,
+            type: Number(ticket.type),
+          })
+          .where({
+            reservation: {
+              id: updateTicketsDto.reservationId,
+            },
+          })
+          .returning('*')
+          .execute();
+
+        return result.raw[0];
+      }),
+    );
   }
 
   async finishReservation(finishReservationDto: ReserveSeatDto) {
